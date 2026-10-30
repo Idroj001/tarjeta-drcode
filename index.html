@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Dr. Code — Desarrollo Web &amp; Soluciones Digitales</title>
+  <meta name="description" content="Tarjeta digital de Dr. Code (Jordi Morales). Páginas web, dashboards, menús digitales y automatización en Quito, Ecuador.">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:title" content="Dr. Code — Desarrollo Web &amp; Soluciones Digitales">
+  <meta property="og:description" content="Tarjeta digital: páginas web, dashboards, menús digitales, carritos WhatsApp y automatización. Quito, Ecuador.">
+  <meta property="og:type" content="website">
+  <!-- TODO: al publicar en GitHub Pages, cambiar assets/bg.png por la URL absoluta (https://usuario.github.io/Tarjeta/assets/bg.png) -->
+  <meta property="og:image" content="assets/bg.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --panel-bg: rgba(0, 0, 0, 0.3);
+      --cortina-green-neon: #39ff75;
+      --cyan: #00d4ff;
+      --whatsapp-green: #25d366;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --normal: 400ms;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #000;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    /* ===== CARD CONTAINER ===== */
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    /* ===== BACKGROUND IMAGE ===== */
+    /*
+     * DIMENSIONES IDEALES para bg.jpg:
+     *   Mobile first (prioridad): 1080 × 1920px (9:16)
+     *   Desktop: 1920 × 1080px (16:9)
+     *   Recomendado: 1200 × 1800px+, JPEG/WebP, < 500KB
+     *
+     * Coloca tu archivo en la misma carpeta y renómbralo,
+     * o cambia la URL abajo.
+     */
+    .bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        /* gradiente oscuro para legibilidad */
+        linear-gradient(180deg,
+          rgba(0, 0, 0, 0.15) 0%,
+          rgba(0, 0, 0, 0.55) 50%,
+          rgba(0, 0, 0, 0.85) 100%
+        ),
+        url('assets/bg.png');
+      background-size: cover;
+      background-position: center 25%;
+      transition: transform var(--normal) var(--ease-out), filter var(--normal) var(--ease-out);
+    }
+
+    .bg.up {
+      transform: translateY(-14%);
+    }
+
+    /* ===== HERO (pantalla inicial) ===== */
+    .hero {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 15.5%;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 0 20px;
+      text-align: center;
+      transition: opacity var(--normal) var(--ease-out), transform var(--normal) var(--ease-out);
+    }
+
+    .hero.off {
+      opacity: 0;
+      transform: translateY(-16px);
+      pointer-events: none;
+    }
+
+    .hero-brand {
+      font-family: 'VT323', monospace;
+      font-size: clamp(2.6rem, 11vw, 4rem);
+      line-height: 1;
+      color: var(--cortina-green-neon);
+      letter-spacing: 0.04em;
+      text-shadow:
+        0 0 24px rgba(57, 255, 117, 0.35),
+        0 0 64px rgba(57, 255, 117, 0.15);
+      animation: fadeUp 0.8s var(--ease-out) 0.25s backwards, neonBlink 4.5s steps(1) 2.4s infinite;
+    }
+
+    .hero-brand::after {
+      content: '_';
+      margin-left: 2px;
+      animation: blink 1.1s steps(1) infinite;
+    }
+
+    .hero-sub {
+      font-size: 0.68rem;
+      color: var(--text-primary);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+      animation: fadeUp 0.8s var(--ease-out) 0.5s backwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes blink {
+      0%, 49%  { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    @keyframes neonBlink {
+      0%, 93%, 98%, 100% { opacity: 1; text-shadow: 0 0 24px rgba(57,255,117,.35), 0 0 64px rgba(57,255,117,.15); }
+      94%, 97% { opacity: 0.55; text-shadow: 0 0 8px rgba(57,255,117,.15); }
+    }
+
+    @media (min-width: 480px) {
+      .hero-sub { font-size: 0.75rem; }
+      .hero { bottom: 16.5%; }
+    }
+
+    /* ===== OVERLAY (click catcher) ===== */
+    .click-catcher {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .click-catcher.active {
+      pointer-events: auto;
+    }
+
+    /* ===== LOGO WRAPPER (borde neón con pulso) ===== */
+    .logo-wrapper {
+      position: absolute;
+      top: 90%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      width: min(50vw, 260px);
+      border-radius: 50px;
+      padding: 2px;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1.5px solid rgba(57, 255, 117, 0.25);
+      box-shadow:
+        0 0 15px rgba(57, 255, 117, 0.08),
+        inset 0 0 15px rgba(57, 255, 117, 0.04),
+        0 0 30px rgba(57, 255, 117, 0.04);
+      transition: opacity var(--normal) var(--ease-out), box-shadow var(--normal) var(--ease-out), border-color var(--normal) var(--ease-out);
+      animation: fadeUp 0.8s var(--ease-out) 0.75s backwards, neonPulse 3s ease-in-out infinite;
+    }
+
+    .logo-wrapper.active {
+      opacity: 0;
+      pointer-events: none;
+      animation: none;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% {
+        box-shadow:
+          0 0 15px rgba(57, 255, 117, 0.08),
+          inset 0 0 15px rgba(57, 255, 117, 0.04),
+          0 0 30px rgba(57, 255, 117, 0.04);
+        border-color: rgba(57, 255, 117, 0.25);
+      }
+      50% {
+        box-shadow:
+          0 0 25px rgba(57, 255, 117, 0.18),
+          inset 0 0 20px rgba(57, 255, 117, 0.08),
+          0 0 50px rgba(57, 255, 117, 0.1);
+        border-color: rgba(57, 255, 117, 0.5);
+      }
+    }
+
+    /* ===== LOGO BUTTON ===== */
+    .logo-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      padding: 10px 24px;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    .logo-btn:focus-visible {
+      outline: 2px solid var(--cortina-green-neon);
+      outline-offset: 3px;
+    }
+
+    .logo-text {
+      font-family: 'VT323', monospace;
+      font-size: 1.5rem;
+      color: var(--cortina-green-neon);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(57, 255, 117, 0.2);
+    }
+
+    @media (min-width: 480px) {
+      .logo-wrapper {
+        width: min(45vw, 260px);
+        top: 90%;
+      }
+      .logo-btn {
+        padding: 12px 18px;
+      }
+    }
+
+    /* ===== RETRACT BUTTON (dentro del panel) ===== */
+    .btn-retract {
+      background: transparent;
+      color: var(--cortina-green-neon);
+      border: 1.5px solid rgba(57, 255, 117, 0.2);
+      font-size: 0.82rem;
+      animation: retractPulse 2.5s ease-in-out infinite;
+    }
+
+    .btn-retract:hover {
+      background: rgba(57, 255, 117, 0.06);
+      border-color: rgba(57, 255, 117, 0.5);
+      box-shadow: 0 0 20px rgba(57, 255, 117, 0.12);
+    }
+
+    @keyframes retractPulse {
+      0%, 100% {
+        border-color: rgba(57, 255, 117, 0.2);
+        box-shadow: 0 0 10px rgba(57, 255, 117, 0.04);
+      }
+      50% {
+        border-color: rgba(57, 255, 117, 0.5);
+        box-shadow: 0 0 20px rgba(57, 255, 117, 0.12);
+      }
+    }
+
+    /* ===== INFO PANEL ===== */
+    .info-panel {
+      position: absolute;
+      top: 48dvh;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      transform: translateY(100%);
+      transition: transform var(--normal) var(--ease-out);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-panel.open {
+      transform: translateY(0);
+    }
+
+    /* SVG curve at top of panel */
+    .panel-curve {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-bottom: -1px;
+      flex-shrink: 0;
+    }
+
+    .panel-body {
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 36px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .panel-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .panel-name {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      color: var(--cortina-green-neon);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+      margin-bottom: 8px;
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    .section-label {
+      font-size: 0.6rem;
+      color: var(--cortina-green-neon);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .contact-form {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .contact-form.open {
+      display: flex;
+    }
+
+    .panel-body-main {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      gap: 10px;
+    }
+
+    .panel-body-main.hidden,
+    .panel-name.hidden {
+      display: none;
+    }
+
+    .form-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-field i {
+      position: absolute;
+      left: 10px;
+      color: var(--cortina-green-neon);
+      font-size: 0.65rem;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .form-field input,
+    .form-field select {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 10px 10px 10px 28px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      outline: none;
+      width: 100%;
+      transition: border-color 150ms var(--ease-out);
+      user-select: text;
+      cursor: text;
+    }
+
+    .form-field select {
+      cursor: pointer;
+      appearance: auto;
+      -webkit-appearance: auto;
+    }
+
+    .form-field select option {
+      background: #222;
+      color: var(--text-primary);
+    }
+
+    .form-field input:focus,
+    .form-field select:focus {
+      border-color: var(--cortina-green-neon);
+    }
+
+    .form-field input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .form-btns {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .form-btns .btn {
+      flex: 1;
+    }
+
+    .share-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 12px;
+    }
+
+    .share-section.open {
+      display: flex;
+    }
+
+    .share-hint {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .share-qr {
+      width: 160px;
+      height: 160px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px;
+    }
+
+    .panel-services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .panel-services span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      background: rgba(57, 255, 117, 0.06);
+      border: 1px solid rgba(57, 255, 117, 0.12);
+      color: var(--text-secondary);
+    }
+
+    .panel-services span i {
+      color: var(--cortina-green-neon);
+      font-size: 0.6rem;
+    }
+
+    .panel-skills {
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      width: 100%;
+    }
+
+    .panel-skills-track {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      width: max-content;
+      animation: scrollRight 14s linear infinite;
+      will-change: transform;
+    }
+
+    .panel-skills:hover .panel-skills-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes scrollRight {
+      0%   { transform: translateX(-50%); }
+      100% { transform: translateX(0%); }
+    }
+
+    .panel-skills-track img {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      opacity: 0.55;
+      transition: opacity 150ms var(--ease-out), transform 150ms var(--ease-out);
+    }
+
+    .panel-skills-track img:hover {
+      opacity: 1;
+      transform: scale(1.25);
+    }
+
+    .panel-skills-track img[alt="OpenCode"] {
+      filter: brightness(0) invert(1);
+      opacity: 0.65;
+    }
+
+    .panel-skills-track img[alt="OpenCode"]:hover {
+      opacity: 1;
+    }
+
+    .panel-footer-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .panel-footer-info a {
+      font-family: 'VT323', monospace;
+      font-size: 0.85rem;
+      color: var(--cortina-green-neon);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+
+    .panel-footer-info a:hover {
+      text-decoration: underline;
+    }
+
+    .panel-footer-info span:last-child {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+    }
+
+    .panel-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .panel-btns .btn {
+      flex: 1 1 calc(50% - 3px);
+      min-width: 0;
+    }
+
+    .panel-social {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      padding-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .panel-social a {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      opacity: 0.5;
+      transition: opacity 150ms var(--ease-out), color 150ms var(--ease-out);
+    }
+
+    .panel-social a:hover {
+      opacity: 1;
+      color: var(--cortina-green-neon);
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      min-height: 34px;
+      letter-spacing: 0.02em;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 150ms var(--ease-out), box-shadow 150ms var(--ease-out);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-wa {
+      background: var(--whatsapp-green);
+      color: #fff;
+    }
+
+    .btn-wa:hover {
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.75);
+      color: var(--cortina-green-neon);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 10px 18px;
+      border-radius: 30px;
+      border: 1px solid rgba(57, 255, 117, 0.25);
+      box-shadow: 0 0 24px rgba(57, 255, 117, 0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translate(-50%, 10px);
+      pointer-events: none;
+      transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (min-width: 480px) {
+      .panel-body {
+        padding: 40px 32px 32px;
+      }
+      .panel-body-main {
+        gap: 12px;
+      }
+      .panel-name {
+        font-size: 1.05rem;
+      }
+      .panel-title {
+        font-size: 1.1rem;
+      }
+      .contact-item {
+        font-size: 0.75rem;
+      }
+      .panel-btns .btn {
+        flex: 1 1 0;
+      }
+      .btn {
+        font-size: 0.75rem;
+        min-height: 38px;
+        padding: 10px 12px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        max-width: 480px;
+        margin: 0 auto;
+        border-radius: 24px;
+        box-shadow: 0 0 60px rgba(57, 255, 117, 0.06);
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #050505;
+        padding: 24px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      .card {
+        overflow-y: auto;
+      }
+      .info-panel {
+        top: 40dvh;
+      }
+      .panel-body {
+        padding: 16px 16px 12px;
+      }
+      .panel-body-main {
+        gap: 6px;
+      }
+      .panel-name {
+        font-size: 0.85rem;
+      }
+      .panel-title {
+        font-size: 0.85rem;
+      }
+      .panel-btns .btn {
+        flex: 1 1 0;
+      }
+      .btn {
+        font-size: 0.65rem;
+        min-height: 30px;
+        padding: 6px 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+      .logo-wrapper {
+        animation: none;
+        box-shadow:
+          0 0 15px rgba(57, 255, 117, 0.08),
+          inset 0 0 15px rgba(57, 255, 117, 0.04);
+        border-color: rgba(57, 255, 117, 0.25);
+      }
+      .panel-skills-track {
+        animation: none !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- ===== BACKGROUND ===== -->
+    <div class="bg" id="bg" role="img" aria-label="Fondo de presentación Dr. Code"></div>
+
+    <!-- ===== CLICK CATCHER (cierra panel al tocar fondo) ===== -->
+    <div class="click-catcher" id="clickCatcher"></div>
+
+    <!-- ===== HERO (pantalla inicial) ===== -->
+    <div class="hero" id="hero">
+      <h1 class="hero-brand">{Dr.Code}</h1>
+      <p class="hero-sub">Desarrollo Web &amp; Soluciones Digitales</p>
+    </div>
+
+    <!-- ===== LOGO WRAPPER ===== -->
+    <div class="logo-wrapper" id="logoWrapper">
+      <div class="logo-btn" role="button" tabindex="0" aria-label="Abrir tarjeta de presentación">
+        <span class="logo-text">Conoce +</span>
+      </div>
+    </div>
+
+    <!-- ===== INFO PANEL ===== -->
+    <div class="info-panel" id="infoPanel">
+      <!-- Curva ola suave: arco que se aplana -->
+      <svg class="panel-curve" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,0 C200,110 600,0 1440,0 L1440,120 L0,120 Z" fill="var(--panel-bg)"/>
+      </svg>
+
+      <div class="panel-body">
+        <div class="panel-name">
+          <span>Jordi Morales</span>
+          <span>{Dr.Code}</span>
+        </div>
+
+        <div class="panel-body-main" id="panelBodyMain">
+          <h3 class="panel-title">Desarrollo Web &amp; Soluciones Digitales</h3>
+          <p class="section-label">Servicios</p>
+          <div class="panel-services">
+            <span><i class="fas fa-globe" aria-hidden="true"></i> Web</span>
+            <span><i class="fas fa-mobile-screen" aria-hidden="true"></i> Landing</span>
+            <span><i class="fas fa-chart-pie" aria-hidden="true"></i> Dashboards</span>
+            <span><i class="fas fa-cart-shopping" aria-hidden="true"></i> Carritos.Compra/WhatsApp</span>
+            <span><i class="fas fa-clipboard-list" aria-hidden="true"></i> Menú digital</span>
+            <span><i class="fas fa-credit-card" aria-hidden="true"></i> Tarjeta P. digital</span>
+            <span><i class="fas fa-robot" aria-hidden="true"></i> Automatización</span>
+          </div>
+
+          <p class="section-label">Skills</p>
+          <div class="panel-skills">
+            <div class="panel-skills-track" id="skillsTrack"></div>
+          </div>
+
+          <div class="panel-btns">
+            <a href="https://wa.me/593999806465?text=Hola%20Dr.Code" target="_blank" rel="noopener" class="btn btn-wa" aria-label="Contactar por WhatsApp">
+              <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
+            </a>
+            <a href="#" class="btn btn-outline" aria-label="Ver portafolio">
+              <i class="fas fa-briefcase" aria-hidden="true"></i> Portafolio
+            </a>
+            <button class="btn btn-outline" id="contactBtn" aria-label="Abrir formulario de contacto">
+              <i class="fas fa-paper-plane" aria-hidden="true"></i> <span>Contacto</span>
+            </button>
+            <button class="btn btn-retract" id="shareBtn" aria-label="Compartir tarjeta">
+              <span>Compartir</span>
+            </button>
+            <button class="btn btn-outline" id="vcardBtn" aria-label="Guardar contacto en la agenda">
+              <i class="fas fa-address-card" aria-hidden="true"></i> <span>Guardar contacto</span>
+            </button>
+            <button class="btn btn-outline" id="copyBtn" aria-label="Copiar número de WhatsApp">
+              <i class="fas fa-copy" aria-hidden="true"></i> <span>Copiar WhatsApp</span>
+            </button>
+          </div>
+
+          <div class="panel-social">
+            <a href="https://tusitio.com" target="_blank" rel="noopener" aria-label="Web"><i class="fas fa-globe"></i></a>
+            <a href="https://facebook.com/tuPagina" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://github.com/tuUser" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/tuUser" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="contact-form" id="contactForm">
+          <div class="form-field">
+            <i class="fas fa-user" aria-hidden="true"></i>
+            <input type="text" id="formName" placeholder="Nombre *" required>
+          </div>
+          <div class="form-field">
+            <i class="fas fa-envelope" aria-hidden="true"></i>
+            <input type="email" id="formEmail" placeholder="Correo *">
+          </div>
+          <div class="form-field">
+            <i class="fas fa-phone" aria-hidden="true"></i>
+            <input type="tel" id="formPhone" placeholder="Celular *" required>
+          </div>
+          <div class="form-field">
+            <i class="fas fa-map-pin" aria-hidden="true"></i>
+            <input type="text" id="formCity" placeholder="Ciudad">
+          </div>
+          <div class="form-field">
+            <i class="fas fa-tag" aria-hidden="true"></i>
+            <select id="formService">
+              <option value="" disabled selected>Servicio</option>
+              <option value="Web">Web</option>
+              <option value="Landing">Landing</option>
+              <option value="Dashboards">Dashboards</option>
+              <option value="Carrito de Compra / WhatsApp">Carrito de Compra / WhatsApp</option>
+              <option value="Menú digital">Menú digital</option>
+              <option value="Tarjeta de Presentación digital">Tarjeta de Presentación digital</option>
+              <option value="Automatización">Automatización</option>
+            </select>
+          </div>
+          <div class="form-btns">
+            <button class="btn btn-wa" id="formSubmitBtn">
+              <i class="fab fa-whatsapp" aria-hidden="true"></i> Enviar
+            </button>
+            <button class="btn btn-outline" id="formCancelBtn">
+              Cancelar
+            </button>
+          </div>
+
+          <div class="panel-footer-info">
+            <span><a href="https://tudominio.com" target="_blank" rel="noopener">{Dr.Code}</a></span>
+            <span>Quito - Ecuador</span>
+          </div>
+        </div>
+
+        <div class="share-section" id="shareSection">
+          <p class="share-hint">Escanea para compartir</p>
+          <img class="share-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://tusitio.com" alt="QR para compartir" loading="lazy">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var WHATSAPP_NUMBER = '593999806465';
+      var WHATSAPP_DISPLAY = '+593 99 980 6465';
+      var OWNER_NAME = 'Jordi Morales';
+      var OWNER_EMAIL = 'jordy.mh_1994@hotmail.com';
+
+      var skills = [
+        { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg' },
+        { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg' },
+        { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg' },
+        { name: 'OpenCode', icon: 'assets/opencode.svg' },
+        { name: 'Warp', icon: 'https://cdn.simpleicons.org/warp/01A4FF' },
+        { name: 'Obsidian', icon: 'https://cdn.simpleicons.org/obsidian/7C3AED' },
+        { name: 'Hostinger', icon: 'https://cdn.simpleicons.org/hostinger/673DE6' },
+        { name: 'GitHub', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg' },
+      ];
+
+      // render skills track (2x for seamless loop)
+      var track = document.getElementById('skillsTrack');
+      if (track) {
+        var html = '';
+        for (var r = 0; r < 2; r++) {
+          for (var i = 0; i < skills.length; i++) {
+            html += '<img src="' + skills[i].icon + '" alt="' + skills[i].name + '" loading="lazy">';
+          }
+        }
+        track.innerHTML = html;
+      }
+
+      var panel = document.getElementById('infoPanel');
+      var wrapper = document.getElementById('logoWrapper');
+      var bg = document.getElementById('bg');
+      var catcher = document.getElementById('clickCatcher');
+      var hero = document.getElementById('hero');
+      var panelName = document.querySelector('.panel-name');
+      var bodyMain = document.getElementById('panelBodyMain');
+      var contactForm = document.getElementById('contactForm');
+      var shareSection = document.getElementById('shareSection');
+      var contactBtn = document.getElementById('contactBtn');
+      var shareBtn = document.getElementById('shareBtn');
+      var formSubmitBtn = document.getElementById('formSubmitBtn');
+      var formCancelBtn = document.getElementById('formCancelBtn');
+      var vcardBtn = document.getElementById('vcardBtn');
+      var copyBtn = document.getElementById('copyBtn');
+
+      function togglePanel() {
+        var isOpen = panel.classList.contains('open');
+        panel.classList.toggle('open', !isOpen);
+        wrapper.classList.toggle('active', !isOpen);
+        bg.classList.toggle('up', !isOpen);
+        catcher.classList.toggle('active', !isOpen);
+        hero.classList.toggle('off', !isOpen);
+        // reset sections when closing panel
+        if (isOpen) {
+          closeSubSections();
+        }
+      }
+
+      function closeSubSections() {
+        contactForm.classList.remove('open');
+        shareSection.classList.remove('open');
+        bodyMain.classList.remove('hidden');
+        panelName.classList.remove('hidden');
+        contactBtn.querySelector('span').textContent = 'Contacto';
+        shareBtn.querySelector('span').textContent = 'Compartir';
+      }
+
+      function toggleContactForm() {
+        var isOpen = contactForm.classList.contains('open');
+        closeSubSections();
+        if (!isOpen) {
+          contactForm.classList.add('open');
+          bodyMain.classList.add('hidden');
+          panelName.classList.add('hidden');
+          contactBtn.querySelector('span').textContent = 'Cerrar';
+        }
+      }
+
+      function cancelContactForm() {
+        closeSubSections();
+      }
+
+      function toggleShare() {
+        var isOpen = shareSection.classList.contains('open');
+        closeSubSections();
+        if (!isOpen) {
+          shareSection.classList.add('open');
+          bodyMain.classList.add('hidden');
+          shareBtn.querySelector('span').textContent = 'Cerrar';
+        }
+      }
+
+      function submitContactForm() {
+        var name = document.getElementById('formName').value.trim();
+        var email = document.getElementById('formEmail').value.trim();
+        var phone = document.getElementById('formPhone').value.trim();
+        var city = document.getElementById('formCity').value.trim();
+        var service = document.getElementById('formService').value;
+
+        if (!name || !phone) {
+          alert('Por favor completa Nombre y Celular.');
+          return;
+        }
+
+        var msg = 'Hola Dr. Code, quisiera más información.%0A%0A';
+        msg += '*Nombre:* ' + encodeURIComponent(name) + '%0A';
+        if (email) msg += '*Correo:* ' + encodeURIComponent(email) + '%0A';
+        msg += '*Celular:* ' + encodeURIComponent(phone) + '%0A';
+        msg += '*Ciudad:* ' + encodeURIComponent(city || 'Quito') + '%0A';
+        if (service) msg += '*Servicio:* ' + encodeURIComponent(service);
+
+        closeSubSections();
+        setTimeout(function () {
+          window.location.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg;
+        }, 300);
+      }
+
+      function saveContact() {
+        var vcf = [
+          'BEGIN:VCARD',
+          'VERSION:3.0',
+          'N:Morales;Jordi;;;',
+          'FN:Jordi Morales',
+          'ORG:Dr. Code',
+          'TITLE:Desarrollo Web & Soluciones Digitales',
+          'TEL;TYPE=CELL,VOICE:+593999806465',
+          'TEL;TYPE=CELL;VALUE=uri:tel:+593999806465',
+          'EMAIL;TYPE=INTERNET:' + OWNER_EMAIL,
+          'URL:https://wa.me/' + WHATSAPP_NUMBER,
+          'NOTE:Servicios: Web\\, Landings\\, Dashboards\\, Menú digital\\, Automatización',
+          'END:VCARD'
+        ].join('\r\n');
+        var blob = new Blob(['\ufeff', vcf], { type: 'text/vcard;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'Dr-Code-Jordi-Morales.vcf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        showToast('Contacto descargado ✓');
+      }
+
+      function copyWhatsApp() {
+        var done = function () { showToast('WhatsApp copiado: ' + WHATSAPP_DISPLAY + ' ✓'); };
+        var fallback = function () {
+          var ta = document.createElement('textarea');
+          ta.value = '+' + WHATSAPP_NUMBER;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {
+            showToast('No se pudo copiar ' + WHATSAPP_DISPLAY);
+          }
+          ta.remove();
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText('+' + WHATSAPP_NUMBER).then(done, fallback);
+        } else {
+          fallback();
+        }
+      }
+
+      var toastTimer = null;
+      function showToast(msg) {
+        var toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.remove('show');
+        }, 2600);
+      }
+
+      // events
+      if (wrapper) {
+        wrapper.addEventListener('click', togglePanel);
+        wrapper.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePanel(); }
+        });
+      }
+      if (shareBtn) shareBtn.addEventListener('click', toggleShare);
+      if (catcher) catcher.addEventListener('click', function () {
+        if (contactForm.classList.contains('open') || shareSection.classList.contains('open')) {
+          closeSubSections();
+        } else if (panel.classList.contains('open')) {
+          togglePanel();
+        }
+      });
+      if (contactBtn) contactBtn.addEventListener('click', toggleContactForm);
+      if (formCancelBtn) formCancelBtn.addEventListener('click', cancelContactForm);
+      if (formSubmitBtn) formSubmitBtn.addEventListener('click', submitContactForm);
+      if (vcardBtn) vcardBtn.addEventListener('click', saveContact);
+      if (copyBtn) copyBtn.addEventListener('click', copyWhatsApp);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          if (contactForm.classList.contains('open') || shareSection.classList.contains('open')) {
+            closeSubSections();
+          } else if (panel.classList.contains('open')) {
+            togglePanel();
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
