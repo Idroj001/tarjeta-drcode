@@ -313,6 +313,8 @@
     .panel-name {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 8px;
       font-family: 'VT323', monospace;
       font-size: 1rem;
       color: var(--cortina-green-neon);
@@ -566,15 +568,14 @@
 
     .panel-social {
       display: flex;
-      justify-content: center;
-      gap: 26px;
-      padding: 16px 0 6px;
+      align-items: center;
+      gap: 10px;
       flex-shrink: 0;
     }
 
     .panel-social a {
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      font-size: 0.72rem;
       opacity: 0.5;
       transition: opacity 150ms var(--ease-out), color 150ms var(--ease-out);
     }
@@ -754,6 +755,12 @@
       <div class="panel-body">
         <div class="panel-name">
           <span>Jordi Morales</span>
+          <div class="panel-social">
+            <a href="https://tusitio.com" target="_blank" rel="noopener" aria-label="Web"><i class="fas fa-globe"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61596009542212" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://github.com/tuUser" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/tuUser" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
           <span>{Dr.Code}</span>
         </div>
 
@@ -788,13 +795,6 @@
             <button class="btn btn-retract" id="shareBtn" aria-label="Compartir tarjeta">
               <span>Compartir</span>
             </button>
-          </div>
-
-          <div class="panel-social">
-            <a href="https://tusitio.com" target="_blank" rel="noopener" aria-label="Web"><i class="fas fa-globe"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=61596009542212" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://github.com/tuUser" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <a href="https://linkedin.com/in/tuUser" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
 
