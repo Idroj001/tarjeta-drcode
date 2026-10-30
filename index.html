@@ -291,8 +291,6 @@
       margin-bottom: -1px;
       flex-shrink: 0;
       overflow: visible;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
     }
 
     .panel-body {
@@ -754,7 +752,7 @@
       <svg class="panel-curve" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
         <defs>
           <linearGradient id="curveFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#000000" stop-opacity="0.08"/>
+            <stop offset="0" stop-color="#000000" stop-opacity="0.10"/>
             <stop offset="0.55" stop-color="#000000" stop-opacity="0.24"/>
             <stop offset="1" stop-color="#000000" stop-opacity="0.30"/>
           </linearGradient>
@@ -775,11 +773,11 @@
             <feGaussianBlur stdDeviation="4"/>
           </filter>
         </defs>
-        <path d="M0,100 C360,20 1080,20 1440,100 L1440,120 L0,120 Z" fill="url(#curveFill)"/>
-        <path d="M0,100 C360,20 1080,20 1440,100" fill="none" stroke="url(#curveGlow)" stroke-width="16" filter="url(#curveBlurWide)"/>
-        <path d="M0,100 C360,20 1080,20 1440,100" fill="none" stroke="url(#curveGlow)" stroke-width="8" filter="url(#curveBlurMid)"/>
-        <path d="M0,100 C360,20 1080,20 1440,100" fill="none" stroke="url(#curveGlow)" stroke-width="2.5"/>
-        <path d="M0,100 C360,20 1080,20 1440,100" fill="none" stroke="url(#curveCore)" stroke-width="1"/>
+        <path d="M0,100 C360,-20 1080,-20 1440,100 L1440,120 L0,120 Z" fill="url(#curveFill)"/>
+        <path d="M0,100 C360,-20 1080,-20 1440,100" fill="none" stroke="url(#curveGlow)" stroke-width="16" filter="url(#curveBlurWide)"/>
+        <path d="M0,100 C360,-20 1080,-20 1440,100" fill="none" stroke="url(#curveGlow)" stroke-width="8" filter="url(#curveBlurMid)"/>
+        <path d="M0,100 C360,-20 1080,-20 1440,100" fill="none" stroke="url(#curveGlow)" stroke-width="2.5"/>
+        <path d="M0,100 C360,-20 1080,-20 1440,100" fill="none" stroke="url(#curveCore)" stroke-width="1"/>
       </svg>
 
       <div class="panel-body">
