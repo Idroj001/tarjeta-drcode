@@ -642,35 +642,6 @@
       background: rgba(255, 255, 255, 0.04);
     }
 
-    /* ===== TOAST ===== */
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-      z-index: 50;
-      background: rgba(0, 0, 0, 0.75);
-      color: var(--cortina-green-neon);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      padding: 10px 18px;
-      border-radius: 30px;
-      border: 1px solid rgba(57, 255, 117, 0.25);
-      box-shadow: 0 0 24px rgba(57, 255, 117, 0.1);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      opacity: 0;
-      transform: translate(-50%, 10px);
-      pointer-events: none;
-      transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
-      white-space: nowrap;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-
     /* ===== RESPONSIVE ===== */
     @media (min-width: 480px) {
       .panel-body {
@@ -831,12 +802,6 @@
             <button class="btn btn-retract" id="shareBtn" aria-label="Compartir tarjeta">
               <span>Compartir</span>
             </button>
-            <button class="btn btn-outline" id="vcardBtn" aria-label="Guardar contacto en la agenda">
-              <i class="fas fa-address-card" aria-hidden="true"></i> <span>Guardar contacto</span>
-            </button>
-            <button class="btn btn-outline" id="copyBtn" aria-label="Copiar número de WhatsApp">
-              <i class="fas fa-copy" aria-hidden="true"></i> <span>Copiar WhatsApp</span>
-            </button>
           </div>
 
           <div class="panel-social">
@@ -901,14 +866,9 @@
 
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
   <script>
     (function () {
       var WHATSAPP_NUMBER = '593999806465';
-      var WHATSAPP_DISPLAY = '+593 99 980 6465';
-      var OWNER_NAME = 'Jordi Morales';
-      var OWNER_EMAIL = 'jordy.mh_1994@hotmail.com';
 
       var skills = [
         { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg' },
@@ -946,8 +906,6 @@
       var shareBtn = document.getElementById('shareBtn');
       var formSubmitBtn = document.getElementById('formSubmitBtn');
       var formCancelBtn = document.getElementById('formCancelBtn');
-      var vcardBtn = document.getElementById('vcardBtn');
-      var copyBtn = document.getElementById('copyBtn');
 
       function togglePanel() {
         var isOpen = panel.classList.contains('open');
@@ -1021,64 +979,6 @@
         }, 300);
       }
 
-      function saveContact() {
-        var vcf = [
-          'BEGIN:VCARD',
-          'VERSION:3.0',
-          'N:Morales;Jordi;;;',
-          'FN:Jordi Morales',
-          'ORG:Dr. Code',
-          'TITLE:Desarrollo Web & Soluciones Digitales',
-          'TEL;TYPE=CELL,VOICE:+593999806465',
-          'TEL;TYPE=CELL;VALUE=uri:tel:+593999806465',
-          'EMAIL;TYPE=INTERNET:' + OWNER_EMAIL,
-          'URL:https://wa.me/' + WHATSAPP_NUMBER,
-          'NOTE:Servicios: Web\\, Landings\\, Dashboards\\, Menú digital\\, Automatización',
-          'END:VCARD'
-        ].join('\r\n');
-        var blob = new Blob(['\ufeff', vcf], { type: 'text/vcard;charset=utf-8' });
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'Dr-Code-Jordi-Morales.vcf';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        showToast('Contacto descargado ✓');
-      }
-
-      function copyWhatsApp() {
-        var done = function () { showToast('WhatsApp copiado: ' + WHATSAPP_DISPLAY + ' ✓'); };
-        var fallback = function () {
-          var ta = document.createElement('textarea');
-          ta.value = '+' + WHATSAPP_NUMBER;
-          ta.style.position = 'fixed';
-          ta.style.opacity = '0';
-          document.body.appendChild(ta);
-          ta.select();
-          try { document.execCommand('copy'); done(); } catch (e) {
-            showToast('No se pudo copiar ' + WHATSAPP_DISPLAY);
-          }
-          ta.remove();
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText('+' + WHATSAPP_NUMBER).then(done, fallback);
-        } else {
-          fallback();
-        }
-      }
-
-      var toastTimer = null;
-      function showToast(msg) {
-        var toast = document.getElementById('toast');
-        if (!toast) return;
-        toast.textContent = msg;
-        toast.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(function () {
-          toast.classList.remove('show');
-        }, 2600);
-      }
-
       // events
       if (wrapper) {
         wrapper.addEventListener('click', togglePanel);
@@ -1097,8 +997,6 @@
       if (contactBtn) contactBtn.addEventListener('click', toggleContactForm);
       if (formCancelBtn) formCancelBtn.addEventListener('click', cancelContactForm);
       if (formSubmitBtn) formSubmitBtn.addEventListener('click', submitContactForm);
-      if (vcardBtn) vcardBtn.addEventListener('click', saveContact);
-      if (copyBtn) copyBtn.addEventListener('click', copyWhatsApp);
 
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
