@@ -39,5 +39,5 @@ No hay build, bundler, linter ni dependencias: los tests usan `node:test`, ya in
 - El número de WhatsApp `593999806465` está duplicado: en el `href` de `wa.me` y en la constante `WHATSAPP_NUMBER` del script. Cambia los dos.
 - El QR de "Compartir" es un PNG pre-renderizado de 600×600 (`assets/qr-compartir.png`) que codifica `https://idroj001.github.io/tarjeta-drcode/`. No se regenera solo; si cambia la URL, vuelve a descargarlo:
   `Invoke-WebRequest "https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=8&ecc=M&data=<url-encoded>" -OutFile assets/qr-compartir.png`
-- Siguen como placeholder: LinkedIn `tuUser`, footer `tudominio.com` y Portafolio con `href="#"`. No inventes valores: pregunta.
+- Siguen como placeholder: footer `tudominio.com` y Portafolio con `href="#"`. No inventes valores: pregunta. LinkedIn ya es real (`https://www.linkedin.com/in/jordy-morales-abaa66243/`).
 - Las metas sociales (`canonical`, `og:url`, `og:image`, `twitter:image`) ya usan URL absoluta pública. Si cambia el dominio, actualiza las cuatro.
