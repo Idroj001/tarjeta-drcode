@@ -10,7 +10,7 @@ No hay build, bundler, linter ni dependencias: los tests usan `node:test`, ya in
 - No hay `package.json`: no ejecutes `npm test` ni agregues dependencias. No introduzcas bundler ni linter.
 - Verifica abriendo `index.html` en el navegador (o `python -m http.server 8000`) en viewport móvil (~390×844) y desktop (≥768px).
 - `html`/`body` tienen `overflow: hidden`: el layout es una tarjeta de viewport fijo, no un documento con scroll.
-- El sitio publicado es `https://idroj001.github.io/tarjeta-drcode/` (repo `Idroj001/tarjeta-drcode`), configurado vía GitHub Pages (branch `main`/root). Verificar que Pages esté activo antes de asumir que la URL funciona.
+- **Dos sitios**: la web oficial es `https://idroj001.github.io/web-drcode/` (a donde apunta el icono del globo) y la tarjeta compartible es `https://idroj001.github.io/tarjeta-drcode/` (repo `Idroj001/tarjeta-drcode`, este repo, publicado vía GitHub Pages branch `main`/root). El QR, `SHARE_URL` y las metas sociales (`canonical`, `og:url`, `og:image`, `twitter:image`) apuntan a la tarjeta.
 
 ## Qué editar
 
