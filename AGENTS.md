@@ -9,7 +9,7 @@ Tarjeta de presentación digital de una sola página para {Dr.Code} (Jordi Moral
 - Tests: `node --test` (sin `package.json`: nunca `npm test`, no agregar dependencias, bundler ni linter).
 - `html`/`body` con `overflow: hidden`: tarjeta de viewport fijo, no documento con scroll. El layout usa `dvh` (no `vh`) por la barra de los navegadores móviles.
 - Dos sitios más la landing: web oficial `https://idroj001.github.io/web-drcode/`, landing `https://idroj001.github.io/DrCode-landing/` y tarjeta compartible `https://idroj001.github.io/tarjeta-drcode/` (este repo, Pages desde root). El QR, `SHARE_URL` y metas sociales apuntan a la tarjeta.
-- `.panel-social` tiene 5 enlaces: Web (`#i-globe`), Landing (`#i-rocket`, símbolo añadido con path FA Free 6.7.2), Facebook, GitHub, LinkedIn.
+- `.panel-social` tiene 4 enlaces: Web (`#i-globe`), Facebook, GitHub, LinkedIn. (El botón de catálogo se agregará ahí más adelante — decidido por el usuario, no reponer el de Landing.)
 - Carrusel de skills: GitHub va en **blanco** vía `https://cdn.simpleicons.org/github/FFFFFF` (misma CDN que Warp/Obsidian/Hostinger); OpenCode va en blanco por CSS (`filter: brightness(0) invert(1)` en `img[alt="OpenCode"]`). Los iconos negros de devicon no contrastan con el fondo oscuro: si agregas uno, usa simpleicons con color explícito o el filter.
 
 ## Acoplamientos que se rompen fácil
